@@ -1,0 +1,466 @@
+```html
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Local Community Event Portal</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:linear-gradient(135deg,#4facfe,#8e44ad);
+margin:0;
+padding:20px;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+}
+
+h1{
+text-align:center;
+color:white;
+}
+
+.controls{
+display:flex;
+gap:10px;
+justify-content:center;
+margin:20px;
+}
+
+input,select,button{
+padding:10px;
+border:none;
+border-radius:8px;
+}
+
+#events{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:20px;
+}
+
+.card{
+background:white;
+padding:20px;
+border-radius:12px;
+}
+
+.card h3{
+color:#8e44ad;
+}
+
+button{
+background:#ff4081;
+color:white;
+cursor:pointer;
+}
+
+button:hover{
+background:#e91e63;
+}
+
+form{
+background:white;
+padding:20px;
+margin-top:30px;
+border-radius:15px;
+}
+
+.success{
+color:green;
+margin-top:10px;
+}
+
+.error{
+color:red;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>
+🎉 Local Community Event Portal
+</h1>
+
+<div class="controls">
+
+<input
+type="text"
+id="search"
+placeholder="Search Event">
+
+<select id="category">
+
+<option value="all">
+All Categories
+</option>
+
+<option value="Music">
+Music
+</option>
+
+<option value="Workshop">
+Workshop
+</option>
+
+<option value="Sports">
+Sports
+</option>
+
+</select>
+
+</div>
+
+<div id="events"></div>
+
+<form id="form">
+
+<h2>Register Form</h2>
+
+<br>
+
+<input
+name="name"
+placeholder="Enter Name">
+
+<br><br>
+
+<input
+name="email"
+type="email"
+placeholder="Enter Email">
+
+<br><br>
+
+<select name="event">
+
+<option>
+Music Festival
+</option>
+
+<option>
+Coding Workshop
+</option>
+
+<option>
+Sports Meet
+</option>
+
+</select>
+
+<br><br>
+
+<button type="submit">
+Submit
+</button>
+
+<p id="msg"></p>
+
+</form>
+
+</div>
+
+<script>
+
+console.log(
+"Welcome to Community Portal"
+);
+
+window.onload=function(){
+
+alert(
+"Page Loaded"
+);
+
+showEvents(
+events
+);
+
+};
+
+class Event{
+
+constructor(
+name,
+date,
+category,
+seats
+){
+
+this.name=name;
+this.date=date;
+this.category=category;
+this.seats=seats;
+
+}
+
+}
+
+let events=[
+
+new Event(
+"Music Festival",
+"10 June",
+"Music",
+20
+),
+
+new Event(
+"Coding Workshop",
+"20 June",
+"Workshop",
+15
+),
+
+new Event(
+"Sports Meet",
+"30 June",
+"Sports",
+10
+)
+
+];
+
+function showEvents(data){
+
+let container=
+document.getElementById(
+"events"
+);
+
+container.innerHTML="";
+
+data.forEach(
+
+e=>{
+
+let card=
+document.createElement(
+"div"
+);
+
+card.className=
+"card";
+
+card.innerHTML=
+
+`
+
+<h3>${e.name}</h3>
+
+<p>
+Date:
+${e.date}
+</p>
+
+<p>
+Category:
+${e.category}
+</p>
+
+<p>
+Seats:
+${e.seats}
+</p>
+
+<button
+onclick=
+"register('${e.name}')">
+
+Register
+
+</button>
+
+`;
+
+container.appendChild(
+card
+);
+
+}
+
+);
+
+}
+
+function register(name){
+
+let event=
+events.find(
+e=>
+e.name===name
+);
+
+if(
+event.seats>0
+){
+
+event.seats--;
+
+alert(
+"Registered for "
++name
+);
+
+showEvents(
+events
+);
+
+}
+
+else{
+
+alert(
+"No Seats Available"
+);
+
+}
+
+}
+
+document
+.getElementById(
+"search"
+)
+
+.addEventListener(
+
+"input",
+
+filterEvents
+
+);
+
+document
+.getElementById(
+"category"
+)
+
+.addEventListener(
+
+"change",
+
+filterEvents
+
+);
+
+function filterEvents(){
+
+let text=
+document
+.getElementById(
+"search"
+)
+.value
+.toLowerCase();
+
+let category=
+document
+.getElementById(
+"category"
+)
+.value;
+
+let filtered=
+events.filter(
+
+e=>
+
+e.name
+.toLowerCase()
+.includes(
+text
+)
+
+&&
+
+(
+category==="all"
+
+||
+
+e.category===category
+
+)
+
+);
+
+showEvents(
+filtered
+);
+
+}
+
+document
+.getElementById(
+"form"
+)
+
+.addEventListener(
+
+"submit",
+
+function(event){
+
+event.preventDefault();
+
+let name=
+this.elements
+.name
+.value;
+
+let email=
+this.elements
+.email
+.value;
+
+let msg=
+document
+.getElementById(
+"msg"
+);
+
+if(
+name===""
+||
+email===""
+){
+
+msg.className=
+"error";
+
+msg.innerHTML=
+"Fill all fields";
+
+return;
+
+}
+
+msg.className=
+"success";
+
+msg.innerHTML=
+"Registration Submitted Successfully ✅";
+
+this.reset();
+
+}
+
+);
+
+</script>
+
+</body>
+
+</html>
+```
