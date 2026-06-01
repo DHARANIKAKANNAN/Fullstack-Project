@@ -1,0 +1,70 @@
+CREATE DATABASE IF NOT EXISTS event_portal;
+USE event_portal;
+
+-- CLEAN TABLES
+DROP TABLE IF EXISTS Registrations;
+DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS Events;
+
+-- USERS
+CREATE TABLE Users (
+user_id INT PRIMARY KEY,
+full_name VARCHAR(100),
+email VARCHAR(100),
+city VARCHAR(100),
+registration_date DATE
+);
+
+-- EVENTS
+CREATE TABLE Events (
+event_id INT PRIMARY KEY,
+title VARCHAR(200),
+description TEXT,
+city VARCHAR(100),
+start_date DATETIME,
+end_date DATETIME,
+status VARCHAR(20),
+organizer_id INT
+);
+
+-- REGISTRATIONS
+CREATE TABLE Registrations (
+registration_id INT PRIMARY KEY,
+user_id INT,
+event_id INT,
+registration_date DATE
+);
+
+------------------------------------------------
+-- INSERT DATA (CLEAN & MATCHED)
+------------------------------------------------
+
+INSERT INTO Users VALUES
+(1,'Alice Johnson','alice@example.com','New York','2024-12-01'),
+(2,'Bob Smith','bob@example.com','Los Angeles','2024-12-05'),
+(3,'Charlie Lee','charlie@example.com','Chicago','2024-12-10'),
+(4,'Diana King','diana@example.com','New York','2025-01-15'),
+(5,'Ethan Hunt','ethan@example.com','Los Angeles','2025-02-01');
+
+INSERT INTO Events VALUES
+(1,'Tech Meetup','Tech event','New York','2025-06-10 10:00:00','2025-06-10 16:00:00','upcoming',1),
+(2,'AI Conference','AI event','Chicago','2025-05-15 09:00:00','2025-05-15 17:00:00','completed',3),
+(3,'Frontend Bootcamp','Frontend training','Los Angeles','2025-07-01 10:00:00','2025-07-03 16:00:00','upcoming',2);
+
+INSERT INTO Registrations VALUES
+(1,1,1,'2025-05-01'),
+(2,2,1,'2025-05-02'),
+(3,3,2,'2025-04-30'),
+(4,4,2,'2025-04-28'),
+(5,5,3,'2025-06-15');
+
+------------------------------------------------
+-- FINAL CORRECT JOIN QUERY
+------------------------------------------------
+
+SELECT 
+u.full_name,
+e.title
+FROM Registrations r
+JOIN Users u ON u.user_id = r.user_id
+JOIN Events e ON e.event_id = r.event_id;
